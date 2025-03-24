@@ -8,7 +8,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Package, ShoppingBag } from 'lucide-react';
 
 interface OrderItem {
   id: string;
@@ -92,41 +93,48 @@ const OrderItemsTable: React.FC<OrderItemsTableProps> = ({ orderId, orderNumber 
   const orderTotal = orderItems.reduce((total, item) => total + item.total_price, 0);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Articles de la commande {orderNumber}</CardTitle>
+    <Card className="shadow-sm hover:shadow-md transition-all duration-300">
+      <CardHeader className="flex flex-row items-center gap-2">
+        <ShoppingBag className="h-5 w-5 text-primary" />
+        <div>
+          <CardTitle>Articles de la commande {orderNumber}</CardTitle>
+          <CardDescription>{orderItems.length} articles</CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         {orderItems.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            Aucun article trouvé pour cette commande
+          <div className="text-center py-10 text-muted-foreground flex flex-col items-center">
+            <Package className="h-10 w-10 mb-2 opacity-20" />
+            <p>Aucun article trouvé pour cette commande</p>
           </div>
         ) : (
           <>
-            <Table>
-              <TableHeader className="bg-muted/30">
-                <TableRow>
-                  <TableHead>Produit</TableHead>
-                  <TableHead className="text-center">Quantité</TableHead>
-                  <TableHead className="text-right">Prix unitaire</TableHead>
-                  <TableHead className="text-right">Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orderItems.map((item) => (
-                  <TableRow key={item.id} className="hover-lift hover:bg-muted/20">
-                    <TableCell className="font-medium">{item.product_name}</TableCell>
-                    <TableCell className="text-center">{item.quantity}</TableCell>
-                    <TableCell className="text-right">{formatCurrency(item.unit_price)}</TableCell>
-                    <TableCell className="text-right font-medium">{formatCurrency(item.total_price)}</TableCell>
+            <div className="rounded-md border overflow-hidden">
+              <Table>
+                <TableHeader className="bg-muted/30">
+                  <TableRow>
+                    <TableHead>Produit</TableHead>
+                    <TableHead className="text-center">Quantité</TableHead>
+                    <TableHead className="text-right">Prix unitaire</TableHead>
+                    <TableHead className="text-right">Total</TableHead>
                   </TableRow>
-                ))}
-                <TableRow className="border-t-2">
-                  <TableCell colSpan={3} className="text-right font-bold">Total de la commande</TableCell>
-                  <TableCell className="text-right font-bold text-primary">{formatCurrency(orderTotal)}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {orderItems.map((item) => (
+                    <TableRow key={item.id} className="hover-lift hover:bg-muted/20 transition-all duration-200">
+                      <TableCell className="font-medium">{item.product_name}</TableCell>
+                      <TableCell className="text-center">{item.quantity}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(item.unit_price)}</TableCell>
+                      <TableCell className="text-right font-medium">{formatCurrency(item.total_price)}</TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="border-t-2 bg-muted/10">
+                    <TableCell colSpan={3} className="text-right font-bold">Total de la commande</TableCell>
+                    <TableCell className="text-right font-bold text-primary">{formatCurrency(orderTotal)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
           </>
         )}
       </CardContent>
