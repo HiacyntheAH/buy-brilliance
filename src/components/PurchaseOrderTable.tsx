@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, MoreHorizontal, Search, Filter, Download } from 'lucide-react';
+import { ChevronDown, ChevronUp, MoreHorizontal, Search, Filter, Download, Truck, Package, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Badge from './ui-components/Badge';
 import { 
@@ -17,98 +16,135 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { useNavigate } from 'react-router-dom';
 
 interface PurchaseOrder {
   id: string;
-  reference: string;
+  order_number: string;
+  supplier_id: string;
   supplier: string;
-  date: string;
+  request_id: string;
+  ordered_at: string;
+  delivered_at: string | null;
+  tracking_status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
   amount: number;
-  status: 'pending' | 'approved' | 'rejected' | 'completed';
   department: string;
 }
 
 const mockOrders: PurchaseOrder[] = [
   {
     id: '1',
-    reference: 'PO-2023-001',
+    order_number: 'CMD-2023-001',
+    supplier_id: 'SUPP-123',
     supplier: 'TechSupplies Inc.',
-    date: '2023-10-15',
+    request_id: 'REQ-001',
+    ordered_at: '2023-10-15T10:30:00',
+    delivered_at: '2023-10-20T14:45:00',
+    tracking_status: 'delivered',
     amount: 2500.00,
-    status: 'approved',
     department: 'IT',
   },
   {
     id: '2',
-    reference: 'PO-2023-002',
+    order_number: 'CMD-2023-002',
+    supplier_id: 'SUPP-456',
     supplier: 'Office Solutions',
-    date: '2023-10-17',
+    request_id: 'REQ-002',
+    ordered_at: '2023-10-17T08:15:00',
+    delivered_at: null,
+    tracking_status: 'pending',
     amount: 1250.50,
-    status: 'pending',
     department: 'Marketing',
   },
   {
     id: '3',
-    reference: 'PO-2023-003',
+    order_number: 'CMD-2023-003',
+    supplier_id: 'SUPP-789',
     supplier: 'Global Logistics',
-    date: '2023-10-20',
+    request_id: 'REQ-003',
+    ordered_at: '2023-10-20T11:45:00',
+    delivered_at: '2023-10-25T09:30:00',
+    tracking_status: 'delivered',
     amount: 4750.75,
-    status: 'completed',
     department: 'Operations',
   },
   {
     id: '4',
-    reference: 'PO-2023-004',
+    order_number: 'CMD-2023-004',
+    supplier_id: 'SUPP-101',
     supplier: 'Creative Design Co.',
-    date: '2023-10-22',
+    request_id: 'REQ-004',
+    ordered_at: '2023-10-22T13:20:00',
+    delivered_at: null,
+    tracking_status: 'cancelled',
     amount: 3200.25,
-    status: 'rejected',
     department: 'Marketing',
   },
   {
     id: '5',
-    reference: 'PO-2023-005',
+    order_number: 'CMD-2023-005',
+    supplier_id: 'SUPP-112',
     supplier: 'Industrial Parts Ltd.',
-    date: '2023-10-25',
+    request_id: 'REQ-005',
+    ordered_at: '2023-10-25T15:10:00',
+    delivered_at: null,
+    tracking_status: 'shipped',
     amount: 5600.00,
-    status: 'approved',
     department: 'Manufacturing',
   },
   {
     id: '6',
-    reference: 'PO-2023-006',
+    order_number: 'CMD-2023-006',
+    supplier_id: 'SUPP-131',
     supplier: 'Software Solutions',
-    date: '2023-10-27',
+    request_id: 'REQ-006',
+    ordered_at: '2023-10-27T09:45:00',
+    delivered_at: null,
+    tracking_status: 'pending',
     amount: 8750.50,
-    status: 'pending',
     department: 'IT',
   },
   {
     id: '7',
-    reference: 'PO-2023-007',
+    order_number: 'CMD-2023-007',
+    supplier_id: 'SUPP-142',
     supplier: 'Office Furniture Co.',
-    date: '2023-10-30',
+    request_id: 'REQ-007',
+    ordered_at: '2023-10-30T10:30:00',
+    delivered_at: '2023-11-05T14:15:00',
+    tracking_status: 'delivered',
     amount: 3450.25,
-    status: 'completed',
     department: 'Facilities',
   },
 ];
 
-const statusVariantMap = {
-  pending: 'warning' as const,
-  approved: 'success' as const,
-  rejected: 'danger' as const,
-  completed: 'info' as const,
-};
-
-const statusTextMap = {
-  pending: 'En attente',
-  approved: 'Approuvé',
-  rejected: 'Rejeté',
-  completed: 'Complété',
+const trackingStatusMap = {
+  pending: {
+    label: 'En attente',
+    variant: 'warning' as const,
+    icon: <Package className="h-3.5 w-3.5 mr-1" />
+  },
+  shipped: {
+    label: 'Expédiée',
+    variant: 'info' as const,
+    icon: <Truck className="h-3.5 w-3.5 mr-1" />
+  },
+  delivered: {
+    label: 'Livrée',
+    variant: 'success' as const,
+    icon: <Eye className="h-3.5 w-3.5 mr-1" />
+  },
+  cancelled: {
+    label: 'Annulée',
+    variant: 'danger' as const,
+    icon: null
+  }
 };
 
 const PurchaseOrderTable: React.FC = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<PurchaseOrder[]>(mockOrders);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<keyof PurchaseOrder | null>(null);
@@ -136,20 +172,19 @@ const PurchaseOrderTable: React.FC = () => {
   const filteredOrders = React.useMemo(() => {
     if (!searchTerm) return sortedOrders;
     
+    const lowercasedSearch = searchTerm.toLowerCase();
     return sortedOrders.filter(order => 
-      order.reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.department.toLowerCase().includes(searchTerm.toLowerCase())
+      order.order_number.toLowerCase().includes(lowercasedSearch) ||
+      order.supplier.toLowerCase().includes(lowercasedSearch) ||
+      order.department.toLowerCase().includes(lowercasedSearch)
     );
   }, [sortedOrders, searchTerm]);
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return '—';
+    
     const date = new Date(dateStr);
-    return new Intl.DateTimeFormat('fr-FR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    }).format(date);
+    return format(date, 'dd/MM/yyyy à HH:mm', { locale: fr });
   };
 
   const formatCurrency = (amount: number) => {
@@ -164,6 +199,10 @@ const PurchaseOrderTable: React.FC = () => {
     return sortDirection === 'asc' 
       ? <ChevronUp className="h-4 w-4" />
       : <ChevronDown className="h-4 w-4" />;
+  };
+
+  const handleViewDetails = (orderId: string) => {
+    navigate(`/orders/${orderId}`);
   };
 
   return (
@@ -199,10 +238,10 @@ const PurchaseOrderTable: React.FC = () => {
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow>
-              <TableHead className="w-[180px] cursor-pointer" onClick={() => handleSort('reference')}>
+              <TableHead className="w-[180px] cursor-pointer" onClick={() => handleSort('order_number')}>
                 <div className="flex items-center">
-                  <span>Référence</span>
-                  {renderSortIcon('reference')}
+                  <span>N° de commande</span>
+                  {renderSortIcon('order_number')}
                 </div>
               </TableHead>
               <TableHead className="cursor-pointer" onClick={() => handleSort('supplier')}>
@@ -211,10 +250,16 @@ const PurchaseOrderTable: React.FC = () => {
                   {renderSortIcon('supplier')}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort('date')}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort('ordered_at')}>
                 <div className="flex items-center">
-                  <span>Date</span>
-                  {renderSortIcon('date')}
+                  <span>Date de commande</span>
+                  {renderSortIcon('ordered_at')}
+                </div>
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort('delivered_at')}>
+                <div className="flex items-center">
+                  <span>Date de livraison</span>
+                  {renderSortIcon('delivered_at')}
                 </div>
               </TableHead>
               <TableHead className="cursor-pointer text-right" onClick={() => handleSort('amount')}>
@@ -229,10 +274,10 @@ const PurchaseOrderTable: React.FC = () => {
                   {renderSortIcon('department')}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort('status')}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort('tracking_status')}>
                 <div className="flex items-center">
                   <span>Statut</span>
-                  {renderSortIcon('status')}
+                  {renderSortIcon('tracking_status')}
                 </div>
               </TableHead>
               <TableHead className="w-[80px]"></TableHead>
@@ -241,7 +286,7 @@ const PurchaseOrderTable: React.FC = () => {
           <TableBody>
             {filteredOrders.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-32 text-center">
+                <TableCell colSpan={8} className="h-32 text-center">
                   <div className="flex flex-col items-center justify-center text-muted-foreground">
                     <Search className="h-10 w-10 mb-2 opacity-20" />
                     <p>Aucune commande trouvée</p>
@@ -252,35 +297,41 @@ const PurchaseOrderTable: React.FC = () => {
               filteredOrders.map((order, index) => (
                 <TableRow 
                   key={order.id} 
-                  className={`table-row-fade-in hover-lift delay-${index % 8} hover:bg-muted/20`}
+                  className={`table-row-fade-in hover-lift delay-${index % 8} hover:bg-muted/20 cursor-pointer`}
+                  onClick={() => handleViewDetails(order.id)}
                 >
-                  <TableCell className="font-medium">{order.reference}</TableCell>
+                  <TableCell className="font-medium">{order.order_number}</TableCell>
                   <TableCell>{order.supplier}</TableCell>
-                  <TableCell>{formatDate(order.date)}</TableCell>
+                  <TableCell>{formatDate(order.ordered_at)}</TableCell>
+                  <TableCell>{formatDate(order.delivered_at)}</TableCell>
                   <TableCell className="text-right font-medium">
                     {formatCurrency(order.amount)}
                   </TableCell>
                   <TableCell>{order.department}</TableCell>
                   <TableCell>
                     <Badge 
-                      variant={statusVariantMap[order.status]} 
-                      dot
+                      variant={trackingStatusMap[order.tracking_status].variant} 
+                      className="flex items-center"
                     >
-                      {statusTextMap[order.status]}
+                      {trackingStatusMap[order.tracking_status].icon}
+                      {trackingStatusMap[order.tracking_status].label}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Voir détails</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleViewDetails(order.id)}>
+                          Voir détails
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Voir les articles</DropdownMenuItem>
                         <DropdownMenuItem>Modifier</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
-                          Supprimer
+                          Annuler la commande
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
