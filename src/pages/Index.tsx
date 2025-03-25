@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -8,6 +8,10 @@ const Index = () => {
 
   const goToDashboard = () => {
     navigate('/dashboard');
+  };
+
+  const goToLogin = () => {
+    navigate('/login');
   };
 
   return (
@@ -26,13 +30,24 @@ const Index = () => {
           améliorer la visibilité et réduire les coûts opérationnels.
         </p>
         
-        <Button 
-          onClick={goToDashboard} 
-          size="lg" 
-          className="rounded-full px-8 animate-pulse"
-        >
-          Découvrir le tableau de bord
-        </Button>
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <Button 
+            onClick={goToDashboard} 
+            size="lg" 
+            className="rounded-full px-8"
+          >
+            Découvrir le tableau de bord
+          </Button>
+          
+          <Button 
+            onClick={goToLogin} 
+            size="lg" 
+            variant="outline" 
+            className="rounded-full px-8"
+          >
+            Se connecter
+          </Button>
+        </div>
       </div>
       
       <div className="absolute bottom-10 left-0 right-0 text-center text-sm text-muted-foreground">
