@@ -21,7 +21,7 @@ const Index = () => {
           <span className="text-primary font-medium text-sm">Hackathon Project</span>
         </div>
         
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-primary">
           Réinventez la Gestion des Achats en Entreprise
         </h1>
         
@@ -34,7 +34,7 @@ const Index = () => {
           <Button 
             onClick={goToDashboard} 
             size="lg" 
-            className="rounded-full px-8"
+            className="rounded-full px-8 bg-primary hover:bg-primary/90 text-white"
           >
             Découvrir le tableau de bord
           </Button>
@@ -43,14 +43,14 @@ const Index = () => {
             onClick={goToLogin} 
             size="lg" 
             variant="outline" 
-            className="rounded-full px-8"
+            className="rounded-full px-8 border-primary text-primary hover:bg-primary/10"
           >
             Se connecter
           </Button>
         </div>
       </div>
       
-      <div className="absolute bottom-10 left-0 right-0 text-center text-sm text-muted-foreground">
+      <div className="absolute bottom-10 left-0 right-0 text-center text-sm text-primary/70">
         Développé pour le Hackathon | 2023
       </div>
     </div>
