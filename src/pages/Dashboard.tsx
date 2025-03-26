@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import PurchaseOrderTable from '@/components/PurchaseOrderTable';
@@ -15,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import CreateSupplierForm from '@/components/CreateSupplierForm';
 import SuppliersList from '@/components/SuppliersList';
 import AnalyticsCharts from '@/components/AnalyticsCharts';
+import EnhancedAnalyticsCharts from '@/components/EnhancedAnalyticsCharts';
 
 const Dashboard: React.FC = () => {
   useEffect(() => {
@@ -153,7 +153,7 @@ const Dashboard: React.FC = () => {
                 <CardTitle>Analyses et rapports</CardTitle>
               </CardHeader>
               <CardContent>
-                <AnalyticsCharts />
+                <EnhancedAnalyticsCharts />
               </CardContent>
             </Card>
           </TabsContent>
