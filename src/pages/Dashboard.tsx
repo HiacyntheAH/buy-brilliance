@@ -8,12 +8,13 @@ import {
   CreditCard, 
   ShoppingCart, 
   TrendingUp, 
-  Users,
-  Activity
+  Users
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
+import CreateSupplierForm from '@/components/CreateSupplierForm';
+import SuppliersList from '@/components/SuppliersList';
+import AnalyticsCharts from '@/components/AnalyticsCharts';
 
 const Dashboard: React.FC = () => {
   useEffect(() => {
@@ -121,37 +122,38 @@ const Dashboard: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="suppliers" className="animate-fade-in">
-            <Card className="shadow-sm hover:shadow-md transition-all duration-300">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                <CardTitle>Gestion des fournisseurs</CardTitle>
-                <div className="px-3 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full">
-                  En développement
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground space-y-3">
-                  <Activity className="h-12 w-12 mx-auto opacity-20" />
-                  <p>Module de gestion des fournisseurs en cours de développement.</p>
-                  <p className="text-sm">Disponible dans la prochaine mise à jour.</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Ajouter un fournisseur</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CreateSupplierForm />
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Fournisseurs</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <SuppliersList />
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </TabsContent>
           
           <TabsContent value="analytics" className="animate-fade-in">
             <Card className="shadow-sm hover:shadow-md transition-all duration-300">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardHeader>
                 <CardTitle>Analyses et rapports</CardTitle>
-                <div className="px-3 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full">
-                  En développement
-                </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-muted-foreground space-y-3">
-                  <Activity className="h-12 w-12 mx-auto opacity-20" />
-                  <p>Module d'analyses et rapports en cours de développement.</p>
-                  <p className="text-sm">Disponible dans la prochaine mise à jour.</p>
-                </div>
+                <AnalyticsCharts />
               </CardContent>
             </Card>
           </TabsContent>
