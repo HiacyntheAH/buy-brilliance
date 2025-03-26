@@ -9,16 +9,6 @@ const Dashboard: React.FC = () => {
     document.title = "Tableau de bord - EnterpriseFlow";
   }, []);
 
-  // Animation for stats cards to appear with stagger effect
-  useEffect(() => {
-    const statsCards = document.querySelectorAll('.stats-card');
-    statsCards.forEach((card, index) => {
-      setTimeout(() => {
-        card.classList.add('animate-fade-in');
-      }, 100 * index);
-    });
-  }, []);
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
