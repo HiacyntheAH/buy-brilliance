@@ -70,7 +70,31 @@ const DashboardOverview: React.FC = () => {
           <CardTitle>Liste des commandes récentes</CardTitle>
         </CardHeader>
         <CardContent>
-          <PurchaseOrderTable />
+          <div className="w-full space-y-4">
+            <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+              <div className="relative w-full md:w-80">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <input
+                  type="text"
+                  placeholder="Rechercher des commandes..."
+                  className="pl-10 pr-4 py-2 w-full rounded-md border border-input bg-secondary/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+              
+              <div className="flex space-x-2 w-full md:w-auto">
+                <Button variant="outline" size="sm" className="text-sm font-medium">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filtres
+                </Button>
+                <Button variant="outline" size="sm" className="text-sm font-medium">
+                  <Download className="h-4 w-4 mr-2" />
+                  Exporter
+                </Button>
+              </div>
+            </div>
+            
+            <PurchaseOrderTable />
+          </div>
         </CardContent>
       </Card>
 

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, ChevronDown, Menu, Home, Package, ShoppingCart, Users, FileText } from 'lucide-react';
+import { Search, Bell, ChevronDown, Menu, Home, Package, ShoppingCart, Users, FileText, Filter, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import {
