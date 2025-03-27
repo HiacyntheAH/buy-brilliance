@@ -1,9 +1,27 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { CreditCard, ShoppingCart, TrendingUp, Users } from 'lucide-react';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
+import { CreditCard, ShoppingCart, TrendingUp, Users, FileBarChart2 } from 'lucide-react';
 import PurchaseOrderTable from '@/components/PurchaseOrderTable';
 import StatsCard from './StatsCard';
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+
+// Données pour les charts
+const monthlySpending = [
+  { name: 'Jan', amount: 12500 },
+  { name: 'Fév', amount: 9800 },
+  { name: 'Mar', amount: 15600 },
+  { name: 'Avr', amount: 8400 },
+  { name: 'Mai', amount: 11200 },
+  { name: 'Juin', amount: 14300 },
+  { name: 'Juil', amount: 19200 },
+  { name: 'Août', amount: 16800 },
+  { name: 'Sept', amount: 22400 },
+  { name: 'Oct', amount: 18700 },
+  { name: 'Nov', amount: 23500 },
+  { name: 'Déc', amount: 27800 },
+];
 
 const DashboardOverview: React.FC = () => {
   return (
@@ -47,12 +65,44 @@ const DashboardOverview: React.FC = () => {
         />
       </div>
       
-      <Card className="shadow-sm hover:shadow-md transition-all duration-300">
+      <Card className="shadow-sm hover:shadow-md transition-all duration-300 mb-6">
         <CardHeader>
           <CardTitle>Liste des commandes récentes</CardTitle>
         </CardHeader>
         <CardContent>
           <PurchaseOrderTable />
+        </CardContent>
+      </Card>
+
+      <Card className="shadow-sm hover:shadow-md transition-all duration-300">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg font-medium flex items-center">
+            <FileBarChart2 className="h-4 w-4 mr-2 text-primary" />
+            Analyse des dépenses mensuelles
+          </CardTitle>
+          <CardDescription>Total des achats par mois</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{
+              amount: {
+                theme: {
+                  light: "#9b87f5",
+                  dark: "#9b87f5",
+                },
+              },
+            }}
+            className="aspect-[4/3]"
+          >
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={monthlySpending}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="amount" name="Montant (€)" fill="var(--color-amount)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
     </div>

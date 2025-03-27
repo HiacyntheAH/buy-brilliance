@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, ChevronDown, Menu, Home, Package, ShoppingCart, Users, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +19,8 @@ import {
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,13 +83,22 @@ const Navbar: React.FC = () => {
           </Link>
           
           <div className="hidden lg:flex items-center ml-6 space-x-4">
-            <Link to="/dashboard" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            <Link 
+              to="/dashboard" 
+              className={`text-sm font-medium hover:text-primary transition-colors ${isActive("/dashboard") ? "text-primary" : "text-foreground"}`}
+            >
               Tableau de bord
             </Link>
-            <Link to="/orders" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            <Link 
+              to="/orders" 
+              className={`text-sm font-medium hover:text-primary transition-colors ${isActive("/orders") ? "text-primary" : "text-foreground"}`}
+            >
               Commandes
             </Link>
-            <Link to="/suppliers" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            <Link 
+              to="/suppliers" 
+              className={`text-sm font-medium hover:text-primary transition-colors ${isActive("/suppliers") ? "text-primary" : "text-foreground"}`}
+            >
               Fournisseurs
             </Link>
           </div>
