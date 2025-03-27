@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
-import { CreditCard, ShoppingCart, TrendingUp, Users, FileBarChart2 } from 'lucide-react';
+import { CreditCard, ShoppingCart, TrendingUp, Users, FileBarChart2, Search, Filter, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import PurchaseOrderTable from '@/components/PurchaseOrderTable';
 import StatsCard from './StatsCard';
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
