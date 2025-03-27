@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, ChevronDown, Menu, Home, Package, ShoppingCart, Users, FileText, Filter, Download } from 'lucide-react';
+import { Search, Bell, ChevronDown, Menu, Home, Package, ShoppingCart, Users, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -65,14 +65,6 @@ const Navbar: React.FC = () => {
                 <Link to="/suppliers" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted transition-colors">
                   <Package className="h-4 w-4" />
                   <span>Fournisseurs</span>
-                </Link>
-                <Link to="/reports" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-                  <FileText className="h-4 w-4" />
-                  <span>Rapports</span>
-                </Link>
-                <Link to="/users" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-                  <Users className="h-4 w-4" />
-                  <span>Utilisateurs</span>
                 </Link>
               </div>
             </SheetContent>
